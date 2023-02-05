@@ -21,6 +21,7 @@ ARG CACHE_DATE=2016-01-01
 RUN echo ${CACHE_DATE}
 
 COPY func /root/.func
+RUN chmod +x /root/.func/*.sh
 ENV PATH="${PATH}:/root/.func"
 # COPY bash_functions.sh /root/.bash_functions.sh
 # COPY install-snippet.sh /root/.install-snippet.sh
