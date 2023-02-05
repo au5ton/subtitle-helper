@@ -12,9 +12,9 @@ RUN whisper --model small.en --output_dir /tmp /root/.silent.mp3
 RUN whisper --model small --output_dir /tmp /root/.silent.mp3
 RUN whisper --model medium.en --output_dir /tmp /root/.silent.mp3
 RUN whisper --model medium --output_dir /tmp /root/.silent.mp3
-RUN whisper --model large-v1 --output_dir /tmp /root/.silent.mp3
-RUN whisper --model large-v2 --output_dir /tmp /root/.silent.mp3
-RUN whisper --model large --output_dir /tmp /root/.silent.mp3
+#RUN whisper --model large-v1 --output_dir /tmp /root/.silent.mp3
+#RUN whisper --model large-v2 --output_dir /tmp /root/.silent.mp3
+#RUN whisper --model large --output_dir /tmp /root/.silent.mp3
 
 # just for cache busting these files
 ARG CACHE_DATE=2016-01-01
@@ -22,4 +22,5 @@ RUN echo ${CACHE_DATE}
 
 COPY bash_functions.sh /root/.bash_functions.sh
 COPY install-snippet.sh /root/.install-snippet.sh
+RUN cat /root/.install-snippet.sh >> /root/.bashrc
 ENTRYPOINT [ "/bin/bash" ]
