@@ -1,10 +1,6 @@
 #!/bin/bash
 # Based off of: https://www.baeldung.com/linux/bash-parse-command-line-arguments
 
-# need
-# - location of file
-# - model name
-
 # Black        0;30     Dark Gray     1;30
 # Red          0;31     Light Red     1;31
 # Green        0;32     Light Green   1;32
@@ -31,15 +27,22 @@ if [ $# -eq 0 ]; then
 fi
 
 
-VALID_ARGS=$(getopt -o i:m: --long input:,model: -- "$@")
+VALID_ARGS=$(getopt -o qi:m: --long input:,model: -- "$@")
 if [[ $? -ne 0 ]]; then
   print_usage
   exit 1;
 fi
 
+QUIET=false
+VERBOSE=true
+
 eval set -- "$VALID_ARGS"
 while [ : ]; do
   case "$1" in
+    -q)
+        QUIET=true
+        VERBOSE=false
+        ;;
     -i | --input)
         #echo "Processing 'input' option. Input argument is '$2'"
         INPUT_FILE="$2"
@@ -70,20 +73,37 @@ SUBTITLE_FILE="$TMP_FILE.vtt"
 
 
 # actually do the transcribing, produces a file at "$TMP_FILE.vtt"
-printf "${CYAN}Transcribing with OpenAI Whisper ($MODEL_NAME model): $INPUT_FILE ${NC}\n"
-time whisper --model tiny --language en --output_format vtt --output_dir /tmp "$INPUT_FILE"
+if [ "$VERBOSE" = true ]; then
+  printf "${CYAN}Transcribing file with OpenAI Whisper ($MODEL_NAME model): $INPUT_FILE ${NC}\n"
+  time whisper --verbose True --model tiny --language en --output_format vtt --output_dir /tmp "$INPUT_FILE"
+else
+  whisper --verbose False --model tiny --language en --output_format vtt --output_dir /tmp "$INPUT_FILE"
+fi
 # merge the subtitle and source file into a new file
-printf "${CYAN}Merging VTT subtitle with source MKV file${NC}\n"
+if [ "$VERBOSE" = true ]; then
+  printf "${CYAN}Merging VTT subtitle with source MKV file${NC}\n"
+  mkvmerge -o "$TMP_FILE" "$INPUT_FILE" --language 0:eng --track-name "0:English (OpenAI Whisper, $MODEL_NAME model)" "$SUBTITLE_FILE"
+else
+  mkvmerge -o "$TMP_FILE" "$INPUT_FILE" --language 0:eng --track-name "0:English (OpenAI Whisper, $MODEL_NAME model)" -q "$SUBTITLE_FILE"
+fi
 mkvmerge -o "$TMP_FILE" "$INPUT_FILE" --language 0:eng --track-name "0:English (OpenAI Whisper, $MODEL_NAME model)" "$SUBTITLE_FILE"
 # overrite the source file with the new file
 if [[ $INPUT_FILE == *.mkv ]]; then
-  printf "${CYAN}Overriting source file with merged MKV${NC}\n"
+  if [ "$VERBOSE" = true ]; then
+    printf "${CYAN}Overriting source file with merged MKV${NC}\n"
+  fi
   FILE_DESTINATION="$INPUT_FILE"
 else
-  printf "${CYAN}Copying merged MKV to source directory${NC}\n"
+  if [ "$VERBOSE" = true ]; then
+    printf "${CYAN}Copying merged MKV to source directory${NC}\n"
+  fi
   FILE_DESTINATION="$INPUT_FILE.mkv"
 fi
-rsync -ah --progress "$TMP_FILE" "$FILE_DESTINATION"
+if [ "$VERBOSE" = true ]; then
+  rsync -ah --progress "$TMP_FILE" "$FILE_DESTINATION"
+else
+  rsync -ah "$TMP_FILE" "$FILE_DESTINATION"
+fi
 # delete the temp file
 rm "$TMP_FILE"
 rm "$SUBTITLE_FILE"

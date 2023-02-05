@@ -1,5 +1,5 @@
 FROM python:3.9-bullseye
-RUN apt update && apt install -y ffmpeg mkvtoolnix fd-find nano git build-essential curl wget pv rsync && pip install ffsubsync openai-whisper
+RUN apt update && apt install -y ffmpeg mkvtoolnix fd-find nano git build-essential curl wget pv rsync && pip install ffsubsync openai-whisper tqdm
 COPY silent.mp3 /root/.silent.mp3
 
 # cache the openai models
