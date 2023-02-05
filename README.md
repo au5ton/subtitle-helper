@@ -32,3 +32,5 @@ fdfind -I -e mkv -j 1 -x bash -c "source /root/.bashrc && print_something {}"
     - This is intended to improve the accuracy of Whisper, but may not have an effect at all
   - [ ] Using OpenAI's Whisper, transcribe the MKV file to a newly created subtitle file
   - [ ] Run `mkvmerge` on the MKV and the newly created subtitle file. Give the subtitle a custom title so it is distinguishable from a video player (ex: `English (OpenAI Whisper)`).
+- ???
+- [ ] **_Eventually_**, a WEB UI to start and monitor the "fixing" for an item on Plex
