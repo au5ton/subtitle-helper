@@ -65,7 +65,9 @@ done
 
 set -o errexit
 
-TOTAL=$(fdfind -I -e "$EXT" --full-path "$INPUT_FOLDER" | wc -l)
+#TOTAL=$(fdfind -I -e "$EXT" --full-path "$INPUT_FOLDER" | wc -l)
+
+fdfind -I -e "$EXT" --full-path "$INPUT_FOLDER"
 
 printf "${PURPLE}Transcribing directory with OpenAI Whisper ($MODEL_NAME model): $INPUT_FILE ${NC}\n"
 
