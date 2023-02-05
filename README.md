@@ -23,7 +23,7 @@ fdfind -I -e mkv -j 1 -x bash -c "source /root/.bashrc && print_something {}"
 
 ## TODO
 
-- [ ] If a file already has subtitles:
+- [ ] If a file already has subtitles (either embedded or adjacent to the MKV file):
   - [ ] Extract all the subtitles from the MKV file
   - [ ] Run `ffsubsync` on the MKV file and extracted subtitle file
   - [ ] Run `mkvmerge` on the MKV and the newly created re-synced subtitle file. Give the synced subtitle a custom title so it is distinguishable from a video player (ex: `{{ OLD TITLE }} (ffsubsync)`).
