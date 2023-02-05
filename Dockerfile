@@ -20,7 +20,9 @@ RUN whisper --model medium --output_dir /tmp /root/.silent.mp3
 ARG CACHE_DATE=2016-01-01
 RUN echo ${CACHE_DATE}
 
-COPY bash_functions.sh /root/.bash_functions.sh
-COPY install-snippet.sh /root/.install-snippet.sh
-RUN cat /root/.install-snippet.sh >> /root/.bashrc
+COPY func /root/.func
+ENV PATH="${PATH}:/root/.func"
+# COPY bash_functions.sh /root/.bash_functions.sh
+# COPY install-snippet.sh /root/.install-snippet.sh
+# RUN cat /root/.install-snippet.sh >> /root/.bashrc
 ENTRYPOINT [ "/bin/bash" ]
