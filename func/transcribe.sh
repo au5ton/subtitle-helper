@@ -69,19 +69,19 @@ set -o errexit
 INPUT_FILE_BASENAME=$(basename "$INPUT_FILE")
 INPUT_FILE_DIRNAME=$(dirname "$INPUT_FILE")
 TMP_FILE="/tmp/$INPUT_FILE_BASENAME"
-SUBTITLE_FILE="$TMP_FILE.vtt"
+SUBTITLE_FILE="$TMP_FILE.srt"
 
 
 # actually do the transcribing, produces a file at "$TMP_FILE.vtt"
 if [ "$VERBOSE" = true ]; then
   printf "${CYAN}Transcribing file with OpenAI Whisper ($MODEL_NAME model): $INPUT_FILE ${NC}\n"
-  time whisper --verbose True --model tiny --language en --output_format vtt --output_dir /tmp "$INPUT_FILE"
+  time whisper --verbose True --model tiny --language en --output_format srt --output_dir /tmp "$INPUT_FILE"
 else
-  whisper --verbose False --model tiny --language en --output_format vtt --output_dir /tmp "$INPUT_FILE"
+  whisper --verbose False --model tiny --language en --output_format srt --output_dir /tmp "$INPUT_FILE"
 fi
 # merge the subtitle and source file into a new file
 if [ "$VERBOSE" = true ]; then
-  printf "${CYAN}Merging VTT subtitle with source MKV file${NC}\n"
+  printf "${CYAN}Merging SRT subtitle with source MKV file${NC}\n"
   mkvmerge -o "$TMP_FILE" "$INPUT_FILE" --language 0:eng --track-name "0:English (OpenAI Whisper, $MODEL_NAME model)" "$SUBTITLE_FILE"
 else
   mkvmerge -o "$TMP_FILE" "$INPUT_FILE" --language 0:eng --track-name "0:English (OpenAI Whisper, $MODEL_NAME model)" -q "$SUBTITLE_FILE"
