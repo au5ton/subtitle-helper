@@ -10,11 +10,11 @@ RUN whisper --model base.en --output_dir /tmp /root/.silent.mp3
 RUN whisper --model base --output_dir /tmp /root/.silent.mp3
 RUN whisper --model small.en --output_dir /tmp /root/.silent.mp3
 RUN whisper --model small --output_dir /tmp /root/.silent.mp3
-#RUN whisper --model medium.en --output_dir /tmp /root/.silent.mp3
-#RUN whisper --model medium --output_dir /tmp /root/.silent.mp3
-#RUN whisper --model large-v1 --output_dir /tmp /root/.silent.mp3
-#RUN whisper --model large-v2 --output_dir /tmp /root/.silent.mp3
-#RUN whisper --model large --output_dir /tmp /root/.silent.mp3
+RUN whisper --model medium.en --output_dir /tmp /root/.silent.mp3
+RUN whisper --model medium --output_dir /tmp /root/.silent.mp3
+RUN whisper --model large-v1 --output_dir /tmp /root/.silent.mp3
+RUN whisper --model large-v2 --output_dir /tmp /root/.silent.mp3
+RUN whisper --model large --output_dir /tmp /root/.silent.mp3
 
 # just for cache busting these files
 ARG CACHE_DATE=2016-01-01
